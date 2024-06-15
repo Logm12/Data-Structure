@@ -1,0 +1,184 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct node {
+    char name[50];
+    char telephone[15];
+    struct node *next;
+} *head;
+void createCircularLinkedList(int n) {
+    char name[50], telephone[15], email[50], address[100];
+    int i;
+    struct node *newNode, *temp;
+
+    if (n <= 0) {
+        printf("Invalid input for number of nodes\n");
+        return;
+    }
+
+    head = (struct node*)malloc(sizeof(struct node));
+    if (head == NULL) {
+        printf("Memory not available!\n");
+        return;
+    }
+
+  
+    printf("Enter name for node 1: ");
+    scanf("%49s", name);
+    printf("Enter telephone for node 1: ");
+    scanf("%14s", telephone);
+    printf("Enter email for node 1: ");
+    scanf("%49s", email);
+    printf("Enter address for node 1: ");
+    scanf("%99s", address);
+
+    strcpy(head->name, name);
+    strcpy(head->telephone, telephone);
+    strcpy(head->email, email);
+    strcpy(head->address, address);
+    
+    head->next = head; 
+    temp = head;
+
+
+    for (i = 2; i <= n; i++) {
+        newNode = (struct node*)malloc(sizeof(struct node));
+        if (newNode == NULL) {
+            printf("Unable to allocate memory\n");
+            break;
+        }
+
+        printf("Enter name for node %d: ", i);
+        scanf("%49s", name);
+        printf("Enter telephone for node %d: ", i);
+        scanf("%14s", telephone);
+        printf("Enter email for node %d: ", i);
+        scanf("%49s", email);
+        printf("Enter address for node %d: ", i);
+        scanf("%99s", address);
+
+        strcpy(newNode->name, name);
+        strcpy(newNode->telephone, telephone);
+        strcpy(newNode->email, email);
+        strcpy(newNode->address, address);
+
+        newNode->next = head; 
+        temp->next = newNode; 
+        temp = newNode;
+    }
+
+    printf("Circular Linked List created successfully!\n");
+}
+
+void addNodeAtBeginning(char *name, char *telephone) {
+    struct node *newNode = (struct node*)malloc(sizeof(struct node));
+    struct node *last = head;
+
+    if (newNode == NULL) {
+        printf("Unable to allocate memory.\n");
+        return;
+    }
+
+
+    strcpy(newNode->name, name);
+    strcpy(newNode->telephone, telephone);
+
+    
+    if (head == NULL) {
+        head = newNode;
+        newNode->next = head; 
+    } else {
+        
+        while (last->next != head) {
+            last = last->next;
+        }
+
+        newNode->next = head; 
+        last->next = newNode; 
+        head = newNode; 
+    }
+
+    printf("Node inserted successfully.\n");
+}
+
+void deleteNodeByName(char *name) {
+    struct node *current = head, *prev = NULL, *temp = NULL;
+    int found = 0;
+
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    do {
+        if (strcmp(current->name, name) == 0) {
+            found = 1;
+            if (current == head) {
+                
+                if (head->next == head) {
+                    free(head);
+                    head = NULL;
+                } else {
+                    
+                    temp = head;
+                    while (temp->next != head) {
+                        temp = temp->next;
+                    }
+                    temp->next = head->next; 
+                    free(head);
+                    head = temp->next; 
+                }
+            } else {
+                prev->next = current->next;
+                free(current);
+            }
+            printf("Entry with name '%s' deleted successfully.\n", name);
+            break;
+        }
+        prev = current;
+        current = current->next;
+    } while (current != head);
+
+    if (!found) {
+        printf("Entry with name '%s' not found.\n", name);
+    }
+}
+
+void updateTelephoneByName(char *name, char *newTelephone) {
+    struct node *current = head;
+    int updated = 0;
+
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    do {
+        if (strcmp(current->name, name) == 0) {
+            strcpy(current->telephone, newTelephone);
+            printf("Telephone number updated successfully for '%s'.\n", name);
+            updated = 1;
+            break;
+        }
+        current = current->next;
+    } while (current != head);
+
+    if (!updated) {
+        printf("Entry with name '%s' not found.\n", name);
+    }
+}
+int main() {
+    int n, data;
+
+    printf("Enter the number of nodes: ");
+    scanf("%d", &n);
+
+    createCircularLinkedList(n);
+
+    printf("Enter the data you want to insert at the end: ");
+    scanf("%d", &data);
+    addNode(data);
+
+
+    return 0;
+}
