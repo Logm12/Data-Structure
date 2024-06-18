@@ -213,26 +213,26 @@ void updateTelephoneByName(char *name, char *newTelephone) {
 void searchByName(char *name) {
     struct node *current = head;
     int found = 0;
-    int position = 0; // Bien dem vi tri
+    int position = 0;
 
     if (head == NULL) {
         printf("List is empty.\n");
         return;
     }
 
-    // Tim node theo ten
+    
     do {
         if (strcmp(current->name, name) == 0) {
             printf("Name: %s\n", current->name);
             printf("Telephone: %s\n", current->telephone);
             printf("Email: %s\n", current->email);
             printf("Address: %s\n", current->address);
-            printf("Position: %d\n", position); // In ra vi tri
+            printf("Position: %d\n", position); 
             found = 1;
             break;
         }
         current = current->next;
-        position++; // Tang vi tri len 1
+        position++; 
     } while (current != head);
 
     if (!found) {
@@ -240,47 +240,54 @@ void searchByName(char *name) {
     }
 }
 
+
 // Ham sap xep danh sach lien ket vong theo ten su dung Bubble Sort
 void bubbleSort() {
-    if (head == NULL) {
-        return;
+  if (head == NULL) {
+    printf("List is empty.\n");
+    return;
+  }
+
+  if (head->next == head) {
+    printf("List has only one element. No sort needed.\n");
+    return;
+  }
+
+  int swapped;
+  struct node *ptr1 = head;
+  struct node *prev = NULL;
+
+  do {
+    swapped = 0;
+    ptr1 = head;
+
+    while (ptr1->next != head) {
+      if (strcmp(ptr1->name, ptr1->next->name) > 0) {
+        // Swap nodes instead of data
+        struct node *temp = ptr1->next;
+
+        // Update pointers for swapping
+        if (prev != NULL) {
+          prev->next = temp;
+        } else {
+          // Swapping head node
+          head = temp;
+        }
+
+        ptr1->next = temp->next;
+        temp->next = ptr1;
+        prev = ptr1;
+
+        swapped = 1;
+      }
+      prev = ptr1;
+      ptr1 = ptr1->next;
     }
 
-    int swapped;
-    struct node *ptr1;
-    struct node *lptr = NULL;
+  } while (swapped);
 
-    do {
-        swapped = 0;
-        ptr1 = head;
-
-        do {
-            if (strcmp(ptr1->name, ptr1->next->name) > 0) {
-                // Hoan doi du lieu giua ptr1 va ptr1->next
-                char tempName[50], tempTelephone[15], tempEmail[50], tempAddress[100];
-
-                strcpy(tempName, ptr1->name);
-                strcpy(tempTelephone, ptr1->telephone);
-                strcpy(tempEmail, ptr1->email);
-                strcpy(tempAddress, ptr1->address);
-
-                strcpy(ptr1->name, ptr1->next->name);
-                strcpy(ptr1->telephone, ptr1->next->telephone);
-                strcpy(ptr1->email, ptr1->next->email);
-                strcpy(ptr1->address, ptr1->next->address);
-
-                strcpy(ptr1->next->name, tempName);
-                strcpy(ptr1->next->telephone, tempTelephone);
-                strcpy(ptr1->next->email, tempEmail);
-                strcpy(ptr1->next->address, tempAddress);
-
-                swapped = 1;
-            }
-            ptr1 = ptr1->next;
-        } while (ptr1->next != lptr);
-
-        lptr = ptr1;
-    } while (swapped);
+  printf("Telephone directory has been sorted successfully.\n");
+  displayList();
 }
 
 // Ham chinh
@@ -342,7 +349,7 @@ int main() {
             case 7:
                 displayList();
                 break;
-            case 0:
+            case 8:
                 printf("Exiting program.\n");
                 exit(0);
             default:
