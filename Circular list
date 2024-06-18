@@ -2,35 +2,35 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Định nghĩa cấu trúc của một node trong danh sách liên kết vòng
+// Dinh nghia cau truc cua mot node trong danh sach lien ket vong
 struct node {
-    char name[50];          // Tên
-    char telephone[15];     // Số điện thoại
+    char name[50];          // Ten
+    char telephone[15];     // So dien thoai
     char email[50];         // Email
-    char address[100];      // Địa chỉ
-    struct node *next;      // Con trỏ tới node tiếp theo
-} *head;                    // Con trỏ đầu danh sách
+    char address[100];      // Dia chi
+    struct node *next;      // Con tro toi node tiep theo
+} *head = NULL;             // Con tro dau danh sach
 
-// Hàm tạo danh sách liên kết vòng với n node
+// Ham tao danh sach lien ket vong voi n node
 void createCircularLinkedList(int n) {
     char name[50], telephone[15], email[50], address[100];
     int i;
     struct node *newNode, *temp;
 
-    // Kiểm tra nếu n <= 0, không thể tạo danh sách
+    // Kiem tra neu n <= 0, khong the tao danh sach
     if (n <= 0) {
         printf("Invalid input for number of nodes\n");
         return;
     }
 
-    // Cấp phát bộ nhớ cho node đầu tiên
+    // Cap phat bo nho cho node dau tien
     head = (struct node*)malloc(sizeof(struct node));
     if (head == NULL) {
         printf("Memory not available!\n");
         return;
     }
 
-    // Nhập thông tin cho node đầu tiên
+    // Nhap thong tin cho node dau tien
     printf("Enter name for node 1: ");
     scanf("%49s", name);
     printf("Enter telephone for node 1: ");
@@ -40,16 +40,16 @@ void createCircularLinkedList(int n) {
     printf("Enter address for node 1: ");
     scanf("%99s", address);
 
-    // Sao chép thông tin vào node đầu tiên
+    // Sao chep thong tin vao node dau tien
     strcpy(head->name, name);
     strcpy(head->telephone, telephone);
     strcpy(head->email, email);
     strcpy(head->address, address);
     
-    head->next = head; // Liên kết node đầu tiên với chính nó (tạo vòng)
+    head->next = head; // Lien ket node dau tien voi chinh no (tao vong)
     temp = head;
 
-    // Vòng lặp để tạo các node còn lại
+    // Vong lap de tao cac node con lai
     for (i = 2; i <= n; i++) {
         newNode = (struct node*)malloc(sizeof(struct node));
         if (newNode == NULL) {
@@ -57,7 +57,7 @@ void createCircularLinkedList(int n) {
             break;
         }
 
-        // Nhập thông tin cho node mới
+        // Nhap thong tin cho node moi
         printf("Enter name for node %d: ", i);
         scanf("%49s", name);
         printf("Enter telephone for node %d: ", i);
@@ -67,30 +67,31 @@ void createCircularLinkedList(int n) {
         printf("Enter address for node %d: ", i);
         scanf("%99s", address);
 
-        // Sao chép thông tin vào node mới
+        // Sao chep thong tin vao node moi
         strcpy(newNode->name, name);
         strcpy(newNode->telephone, telephone);
         strcpy(newNode->email, email);
         strcpy(newNode->address, address);
 
-        newNode->next = head; // Liên kết node mới với head
-        temp->next = newNode; // Liên kết node trước đó với node mới
+        newNode->next = head; // Lien ket node moi voi head
+        temp->next = newNode; // Lien ket node truoc do voi node moi
         temp = newNode;
     }
 
     printf("Circular Linked List created successfully!\n");
 }
-// Định nghĩa hàm hiển thị danh sách
+
+// Dinh nghia ham hien thi danh sach
 void displayList() {
     struct node *current;
 
-    // Kiểm tra danh sách có rỗng hay không
+    // Kiem tra danh sach co rong hay khong
     if (head == NULL) {
         printf("List is empty.\n");
         return;
     }
 
-    // In thông tin của từng node trong danh sách liên kết vòng
+    // In thong tin cua tung node trong danh sach lien ket vong
     printf("Circular Linked List:\n");
     current = head;
     do {
@@ -103,7 +104,7 @@ void displayList() {
     } while (current != head);
 }
 
-// Hàm thêm node mới vào đầu danh sách
+// Ham them node moi vao dau danh sach
 void addNodeAtBeginning(char *name, char *telephone, char *email, char *address) {
     struct node *newNode = (struct node*)malloc(sizeof(struct node));
     struct node *last = head;
@@ -113,31 +114,31 @@ void addNodeAtBeginning(char *name, char *telephone, char *email, char *address)
         return;
     }
 
-    // Sao chép thông tin vào node mới
+    // Sao chep thong tin vao node moi
     strcpy(newNode->name, name);
     strcpy(newNode->telephone, telephone);
     strcpy(newNode->email, email);
     strcpy(newNode->address, address);
 
-    // Nếu danh sách rỗng, node mới trở thành head và tự liên kết với chính nó
+    // Neu danh sach rong, node moi tro thanh head va tu lien ket voi chinh no
     if (head == NULL) {
         head = newNode;
         newNode->next = head;
     } else {
-        // Tìm node cuối cùng
+        // Tim node cuoi cung
         while (last->next != head) {
             last = last->next;
         }
 
-        newNode->next = head; // Liên kết node mới với head
-        last->next = newNode; // Liên kết node cuối cùng với node mới
-        head = newNode; // Node mới trở thành head
+        newNode->next = head; // Lien ket node moi voi head
+        last->next = newNode; // Lien ket node cuoi cung voi node moi
+        head = newNode; // Node moi tro thanh head
     }
 
     printf("Node inserted successfully.\n");
 }
 
-// Hàm xóa node theo tên
+// Ham xoa node theo ten
 void deleteNodeByName(char *name) {
     struct node *current = head, *prev = NULL, *temp = NULL;
     int found = 0;
@@ -147,27 +148,27 @@ void deleteNodeByName(char *name) {
         return;
     }
 
-    // Tìm node cần xóa
+    // Tim node can xoa
     do {
         if (strcmp(current->name, name) == 0) {
             found = 1;
             if (current == head) {
-                // Nếu node cần xóa là head
+                // Neu node can xoa la head
                 if (head->next == head) {
                     free(head);
                     head = NULL;
                 } else {
-                    // Tìm node cuối cùng
+                    // Tim node cuoi cung
                     temp = head;
                     while (temp->next != head) {
                         temp = temp->next;
                     }
-                    temp->next = head->next; // Liên kết node cuối cùng với node sau head
+                    temp->next = head->next; // Lien ket node cuoi cung voi node sau head
                     free(head);
-                    head = temp->next; // Cập nhật head
+                    head = temp->next; // Cap nhat head
                 }
             } else {
-                prev->next = current->next; // Bỏ qua node cần xóa
+                prev->next = current->next; // Bo qua node can xoa
                 free(current);
             }
             printf("Entry with name '%s' deleted successfully.\n", name);
@@ -182,7 +183,7 @@ void deleteNodeByName(char *name) {
     }
 }
 
-// Hàm cập nhật số điện thoại theo tên
+// Ham cap nhat so dien thoai theo ten
 void updateTelephoneByName(char *name, char *newTelephone) {
     struct node *current = head;
     int updated = 0;
@@ -192,7 +193,7 @@ void updateTelephoneByName(char *name, char *newTelephone) {
         return;
     }
 
-    // Tìm node cần cập nhật
+    // Tim node can cap nhat
     do {
         if (strcmp(current->name, name) == 0) {
             strcpy(current->telephone, newTelephone);
@@ -208,27 +209,30 @@ void updateTelephoneByName(char *name, char *newTelephone) {
     }
 }
 
-// Hàm tìm kiếm node theo tên
+// Ham tim kiem node theo ten
 void searchByName(char *name) {
     struct node *current = head;
     int found = 0;
+    int position = 0; // Bien dem vi tri
 
     if (head == NULL) {
         printf("List is empty.\n");
         return;
     }
 
-    // Tìm node theo tên
+    // Tim node theo ten
     do {
         if (strcmp(current->name, name) == 0) {
             printf("Name: %s\n", current->name);
             printf("Telephone: %s\n", current->telephone);
             printf("Email: %s\n", current->email);
             printf("Address: %s\n", current->address);
+            printf("Position: %d\n", position); // In ra vi tri
             found = 1;
             break;
         }
         current = current->next;
+        position++; // Tang vi tri len 1
     } while (current != head);
 
     if (!found) {
@@ -236,58 +240,64 @@ void searchByName(char *name) {
     }
 }
 
-// Hàm sắp xếp danh sách liên kết vòng theo tên sử dụng Insertion Sort
-void insertionSort() {
-    struct node *sorted = NULL; // Danh sách đã sắp xếp
-    struct node *current = head;
-    struct node *next;
-    struct node *temp;
-
+// Ham sap xep danh sach lien ket vong theo ten su dung Bubble Sort
+void bubbleSort() {
     if (head == NULL) {
-        printf("List is empty.\n");
         return;
     }
 
-    do {
-        next = current->next;
-        if (sorted == NULL || strcmp(sorted->name, current->name) >= 0) {
-            current->next = (sorted == NULL) ? current : sorted;
-            sorted = current;
-        } else {
-            temp = sorted;
-            while (temp->next != sorted && strcmp(temp->next->name, current->name) < 0) {
-                temp = temp->next;
-            }
-            current->next = temp->next;
-            temp->next = current;
-        }
-        current = next;
-    } while (current != head);
+    int swapped;
+    struct node *ptr1;
+    struct node *lptr = NULL;
 
-    // Thiết lập danh sách vòng lại sau khi sắp xếp
-    temp = sorted;
-    while (temp->next != sorted) {
-        temp = temp->next;
-    }
-    temp->next = sorted;
-    head = sorted;
-    printf("List sorted successfully!\n");
+    do {
+        swapped = 0;
+        ptr1 = head;
+
+        do {
+            if (strcmp(ptr1->name, ptr1->next->name) > 0) {
+                // Hoan doi du lieu giua ptr1 va ptr1->next
+                char tempName[50], tempTelephone[15], tempEmail[50], tempAddress[100];
+
+                strcpy(tempName, ptr1->name);
+                strcpy(tempTelephone, ptr1->telephone);
+                strcpy(tempEmail, ptr1->email);
+                strcpy(tempAddress, ptr1->address);
+
+                strcpy(ptr1->name, ptr1->next->name);
+                strcpy(ptr1->telephone, ptr1->next->telephone);
+                strcpy(ptr1->email, ptr1->next->email);
+                strcpy(ptr1->address, ptr1->next->address);
+
+                strcpy(ptr1->next->name, tempName);
+                strcpy(ptr1->next->telephone, tempTelephone);
+                strcpy(ptr1->next->email, tempEmail);
+                strcpy(ptr1->next->address, tempAddress);
+
+                swapped = 1;
+            }
+            ptr1 = ptr1->next;
+        } while (ptr1->next != lptr);
+
+        lptr = ptr1;
+    } while (swapped);
 }
-// Hàm chính
+
+// Ham chinh
 int main() {
     int choice, n;
     char name[50], telephone[15], email[50], address[100];
 
-    // Vòng lặp menu chính
+    // Vong lap menu chinh
     while (1) {
-        printf("\nCircular Linked List Menu:\n");
+        printf("\nTelephone Directory Management System Menu:\n");
         printf("1. Create Circular Linked List\n");
         printf("2. Add Node at Beginning\n");
         printf("3. Delete Node by Name\n");
         printf("4. Update Telephone by Name\n");
         printf("5. Search by Name\n");
         printf("6. Sort List\n");
-        printf("7. Display List\n"); // Thêm lựa chọn hiển thị danh sách
+        printf("7. Display List\n"); // Them lua chon hien thi danh sach
         printf("8. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
@@ -327,12 +337,12 @@ int main() {
                 searchByName(name);
                 break;
             case 6:
-                insertionSort();
+                bubbleSort();
                 break;
             case 7:
                 displayList();
                 break;
-            case 8:
+            case 0:
                 printf("Exiting program.\n");
                 exit(0);
             default:
